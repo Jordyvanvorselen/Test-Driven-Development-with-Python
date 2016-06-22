@@ -3,7 +3,7 @@ from django.test import TestCase
 from lists.views import home_page
 
 # Create your tests here.
-class SmokeTest(TestCase):
+class HomePageTest(TestCase):
 
     def test_home_page(self):
         found = resolve('/')
