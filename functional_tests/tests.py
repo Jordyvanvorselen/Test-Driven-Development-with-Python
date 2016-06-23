@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from django.test import LiveServerTestCase
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class NewVisitorTest(LiveServerTestCase):
 
@@ -16,6 +18,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def check_for_row_in_list_table(self, row_text):
         table = self.browser.find_element_by_id('id_list_table')
+        self.browser.implicitly_wait(3)
         rows = self.browser.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
@@ -41,6 +44,11 @@ class NewVisitorTest(LiveServerTestCase):
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
+
+        ##WORKAROUND to wait until the next page is loaded.
+        while self.browser.current_url == 'http://localhost:8081/':
+            edith_list_url = 'wrongurl'
+
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
@@ -58,7 +66,6 @@ class NewVisitorTest(LiveServerTestCase):
         # Edith wonders whether the site will remember her list. Then she sees
         # that the site has generated a unique URL for her -- there is some
         # explanatory text to that effect.
-        self.fail('Finish the test!')
 
         # She visits that URL - her to-do list is still there.
 
@@ -88,6 +95,10 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
+
+        ##WORKAROUND to wait until the next page is loaded.
+        while self.browser.current_url == 'http://localhost:8081/':
+            francis_list_url = 'wrongurl'
 
         # Francis gets his own unique URL
         francis_list_url = self.browser.current_url
