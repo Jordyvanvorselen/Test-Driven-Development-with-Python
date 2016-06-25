@@ -2,9 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-import sys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import sys, time
 
 class NewVisitorTest(StaticLiveServerTestCase):
 
@@ -26,7 +24,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         self.browser = webdriver.Firefox(capabilities=firefox_capabilities)
-        self.browser.implicitly_wait(3)
+        self.browser.implicitly_wait(30)
 
     def tearDown(self):
         self.browser.quit()
@@ -61,9 +59,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         old_url = self.browser.current_url
         inputbox.send_keys(Keys.ENTER)
 
-        ##WORKAROUND to wait until the next page is loaded.
-        while self.browser.current_url == old_url:
-            edith_list_url = 'wrongurl'
+        ##WORKAROUND wait until the page is loaded.
+        time.sleep(.5)
 
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
@@ -74,6 +71,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
+
+        ##WORKAROUND to wait until the page is loaded
+        time.sleep(.5)
 
         # The page updates again, and now shows both items on her list
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
@@ -97,7 +97,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         self.browser = webdriver.Firefox(capabilities=firefox_capabilities)
-        self.browser.implicitly_wait(3)
+        self.browser.implicitly_wait(.5)
 
         # Francis visits the home page.  There is no sign of Edith's
         # list
@@ -114,8 +114,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
 
         ##WORKAROUND to wait until the next page is loaded.
-        while self.browser.current_url == 'http://localhost:8081/':
-            francis_list_url = 'wrongurl'
+        time.sleep(.5)
 
         # Francis gets his own unique URL
         francis_list_url = self.browser.current_url
@@ -134,6 +133,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 768)
 
+        ##WORKAROUND to wait until the page is loaded
+        time.sleep(2)
+
         # And she notices the input box is nicely centered
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
@@ -146,9 +148,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         old_url = self.browser.current_url
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
+
         ## WORKAROUND : Selenium too fast, new page not loaded yet. We need to wait until the new page is loaded.
-        while self.browser.current_url == old_url:
-            old_url = old_url
+        time.sleep(.5)
 
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
