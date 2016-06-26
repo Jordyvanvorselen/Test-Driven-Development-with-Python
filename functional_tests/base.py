@@ -26,7 +26,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         self.browser = webdriver.Firefox(capabilities=firefox_capabilities)
-        self.browser.implicitly_wait(30)
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
