@@ -32,6 +32,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
+        time.sleep(.5)
         table = self.browser.find_element_by_id('id_list_table')
         self.browser.implicitly_wait(3)
         rows = self.browser.find_elements_by_tag_name('tr')
