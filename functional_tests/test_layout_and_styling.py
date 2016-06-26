@@ -18,7 +18,7 @@ class LayoutAndStylingTest(FunctionalTest):
         time.sleep(.5)
 
         # And she notices the input box is nicely centered
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
@@ -33,7 +33,7 @@ class LayoutAndStylingTest(FunctionalTest):
         ## WORKAROUND : Selenium too fast, new page not loaded yet. We need to wait until the new page is loaded.
         time.sleep(.5)
 
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
